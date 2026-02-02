@@ -16,13 +16,21 @@ canvas {
   top: 15px;
   left: 50%;
   transform: translateX(-50%);
+  
   background-color: #232329;
-  padding: 8px 16px;
+  padding: 8px 12px;
   border-radius: 8px;
   display: flex;
-  gap: 10px;
+  gap: 8px; 
   box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-  z-index: 10;
+  z-index: 20; 
+  
+  max-width: 90vw;
+  overflow-x: auto; 
+  white-space: nowrap;
+
+  scrollbar-width: none; 
+  &::-webkit-scrollbar { display: none; }
 
   button {
     background: transparent;
@@ -33,15 +41,14 @@ canvas {
     cursor: pointer;
     transition: all 0.2s;
 
-    &:hover {
-      background-color: #36363f;
-      color: white;
-    }
+    min-width: 40px; 
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    &.active {
-      background-color: #403b58;
-      color: #a5a4ff;
-    }
+    &:hover { background-color: #36363f; color: white; }
+    &.active { background-color: #403b58; color: #a5a4ff; }
   }
 }
 
@@ -62,19 +69,22 @@ canvas {
 
 .properties-panel {
   position: absolute;
-  top: 80px; 
+  top: 80px;
   left: 15px;
+  
   background-color: #232329;
   padding: 15px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-  display: flex;
-  flex-direction: column;
   gap: 15px;
   width: 200px;
   color: #ddd;
   font-size: 14px;
   z-index: 10;
+  max-height: 80vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .prop-group {
@@ -132,3 +142,78 @@ input[type="range"] {
   width: 100%;
   cursor: pointer;
 }
+
+.mobile-menu-btn {
+  display: none;
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  z-index: 30;
+  background-color: #232329;
+  border: none;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+
+  &:active { background-color: #36363f; }
+}
+
+@media (max-width: 768px) {
+
+  .mobile-menu-btn {
+    display: flex; 
+  }
+  
+  .toolbar {
+    top: auto;
+    bottom: 20px;
+    padding: 10px;
+    width: auto;
+    max-width: 95vw;
+    border-radius: 50px; 
+    background-color: rgba(35, 35, 41, 0.95);
+  }
+
+ .properties-panel {
+    display: none; 
+    
+    top: 65px; 
+    left: 15px;
+    width: auto;
+    min-width: 200px;
+    
+    flex-direction: column !important; 
+    align-items: flex-start;
+    gap: 15px;
+    padding: 15px;
+    
+    transform-origin: top left;
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  .properties-panel.open {
+    display: flex; 
+  }
+
+  .prop-group {
+    width: 100%;
+    flex-direction: column; 
+    align-items: flex-start;
+    
+    label {
+      display: block !important;
+      margin-bottom: 5px;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+

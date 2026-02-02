@@ -37,6 +37,7 @@ export class WhiteboardComponent implements OnInit {
   writeY = 0;
 
   currentPoints: { x: number, y: number }[] = [];
+  isMenuOpen = false;
 
   constructor(public state: WhiteboardStateService) { }
 
@@ -46,6 +47,10 @@ export class WhiteboardComponent implements OnInit {
     const rc = rough.canvas(canvas);
     this.renderer = new ShapeRenderer(this.ctx, rc, rc.generator);
     this.resizeCanvas();
+  }
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
   }
 
   @HostListener('window:resize')
@@ -288,7 +293,46 @@ export class WhiteboardComponent implements OnInit {
 
     //  Restore default drawing mode (new shapes on top of old ones)
     this.ctx.globalCompositeOperation = 'source-over';
-    
+
     this.redraw();
+  }
+
+  onTouchStart(e: TouchEvent) {
+    e.preventDefault();
+    const touch = e.touches[0];
+    
+    // fake mouse event with the touch coordinates
+    const mouseEvent = new MouseEvent('mousedown', {
+      clientX: touch.clientX,
+      clientY: touch.clientY
+    });
+    
+    this.onMouseDown(mouseEvent);
+  }
+
+  onTouchMove(e: TouchEvent) {
+    e.preventDefault();
+    const touch = e.touches[0];
+    
+    const mouseEvent = new MouseEvent('mousemove', {
+      clientX: touch.clientX,
+      clientY: touch.clientY
+    });
+    
+    this.onMouseMove(mouseEvent);
+  }
+
+  onTouchEnd(e: TouchEvent) {
+    e.preventDefault();
+    // 'touchend' does not have e.touches because the finger is gone!
+    // We use e.changedTouches instead.
+    const touch = e.changedTouches[0];
+    
+    const mouseEvent = new MouseEvent('mouseup', {
+      clientX: touch.clientX,
+      clientY: touch.clientY
+    });
+    
+    this.onMouseUp(mouseEvent);
   }
 }

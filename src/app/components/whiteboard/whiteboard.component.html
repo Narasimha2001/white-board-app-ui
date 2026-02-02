@@ -1,4 +1,11 @@
 <div class="container">
+
+  <button class="mobile-menu-btn" 
+          (click)="toggleMenu()" 
+          (touchstart)="$event.stopPropagation()">
+    <mat-icon>{{ isMenuOpen ? 'close' : 'tune' }}</mat-icon>
+  </button>
+
   <div class="toolbar">
     <ng-container *ngIf="state.tool$ | async as currentTool">
       <button [class.active]="(state.tool$ | async) === 'pencil'" (click)="state.setTool('pencil')">
@@ -40,7 +47,11 @@
     </ng-container>
   </div>
 
-  <div class="properties-panel" *ngIf="(state.tool$ | async) !== 'eraser'">
+  <div class="properties-panel" 
+       [class.open]="isMenuOpen"
+       *ngIf="(state.tool$ | async) !== 'eraser'"
+       (touchstart)="$event.stopPropagation()" 
+       (mousedown)="$event.stopPropagation()">
     <ng-container *ngIf="state.style$ | async as style">
 
       <div class="prop-group">
@@ -78,7 +89,15 @@
     </ng-container>
   </div>
 
-  <canvas #canvas (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)" (mouseup)="onMouseUp($event)">
+  <canvas #canvas 
+  (mousedown)="onMouseDown($event)" 
+  (mousemove)="onMouseMove($event)"
+  (mouseup)="onMouseUp($event)"
+  
+  (touchstart)="onTouchStart($event)"
+  (touchmove)="onTouchMove($event)"
+  (touchend)="onTouchEnd($event)">
+  >
   </canvas>
   <textarea *ngIf="isWriting" #textArea [style.top.px]="writeY" [style.left.px]="writeX"
     [style.color]="(state.style$ | async)?.stroke"
