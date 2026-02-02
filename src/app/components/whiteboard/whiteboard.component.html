@@ -1,0 +1,89 @@
+<div class="container">
+  <div class="toolbar">
+    <ng-container *ngIf="state.tool$ | async as currentTool">
+      <button [class.active]="(state.tool$ | async) === 'pencil'" (click)="state.setTool('pencil')">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button [class.active]="currentTool === 'rectangle'" (click)="state.setTool('rectangle')">
+        <mat-icon>crop_square</mat-icon>
+      </button>
+      <button [class.active]="currentTool === 'circle'" (click)="state.setTool('circle')">
+        <mat-icon>radio_button_unchecked</mat-icon>
+      </button>
+      <button [class.active]="currentTool === 'line'" (click)="state.setTool('line')">
+        <mat-icon>show_chart</mat-icon>
+      </button>
+      <button [class.active]="currentTool === 'arrow'" (click)="state.setTool('arrow')">
+        <mat-icon>east</mat-icon>
+      </button>
+      <button [class.active]="currentTool === 'text'" (click)="state.setTool('text')">
+        <mat-icon>text_fields</mat-icon>
+      </button>
+
+      <div class="separator"></div>
+
+      <button [class.active]="currentTool === 'eraser'" (click)="state.setTool('eraser')">
+        <mat-icon>cleaning_services</mat-icon>
+      </button>
+
+      <div class="separator"></div>
+
+      <button (click)="undo()"><mat-icon>undo</mat-icon></button>
+      <button (click)="redo()"><mat-icon>redo</mat-icon></button>
+
+      <div class="separator"></div>
+
+      <button (click)="downloadCanvas()" title="Save as Image">
+        <mat-icon>save_alt</mat-icon>
+      </button>
+
+    </ng-container>
+  </div>
+
+  <div class="properties-panel" *ngIf="(state.tool$ | async) !== 'eraser'">
+    <ng-container *ngIf="state.style$ | async as style">
+
+      <div class="prop-group">
+        <label>Stroke</label>
+        <div class="color-row">
+          <input type="color" [value]="style.stroke" (change)="updateStroke($event)">
+          <div class="color-circle" style="background:#fff" (click)="setStroke('#ffffff')"></div>
+          <div class="color-circle" style="background:#ff5252" (click)="setStroke('#ff5252')"></div>
+          <div class="color-circle" style="background:#448aff" (click)="setStroke('#448aff')"></div>
+          <div class="color-circle" style="background:#69f0ae" (click)="setStroke('#69f0ae')"></div>
+        </div>
+      </div>
+
+      <div class="prop-group" *ngIf="isShape(state.currentTool)">
+        <label>Background</label>
+        <div class="color-row">
+          <div class="color-circle transparent" [class.selected]="style.fill === 'transparent'"
+            (click)="setFill('transparent')" title="Transparent">
+            <mat-icon>block</mat-icon>
+          </div>
+
+          <input type="color" [value]="style.fill === 'transparent' ? '#000000' : style.fill"
+            (change)="updateFill($event)">
+
+          <div class="color-circle" style="background:#ff5252" (click)="setFill('#ff5252')"></div>
+          <div class="color-circle" style="background:#448aff" (click)="setFill('#448aff')"></div>
+        </div>
+      </div>
+
+      <div class="prop-group">
+        <label>Stroke Width</label>
+        <input type="range" min="1" max="10" [value]="style.strokeWidth" (input)="updateWidth($event)">
+      </div>
+
+    </ng-container>
+  </div>
+
+  <canvas #canvas (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)" (mouseup)="onMouseUp($event)">
+  </canvas>
+  <textarea *ngIf="isWriting" #textArea [style.top.px]="writeY" [style.left.px]="writeX"
+    [style.color]="(state.style$ | async)?.stroke"
+    [style.fontSize.px]="12 + ((state.style$ | async)?.strokeWidth || 2) * 4" [(ngModel)]="writeText"
+    (blur)="onTextBlur()" class="text-input">
+  </textarea>
+
+</div>

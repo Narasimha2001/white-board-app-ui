@@ -1,0 +1,134 @@
+.container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+canvas {
+  display: block;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+
+.toolbar {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #232329;
+  padding: 8px 16px;
+  border-radius: 8px;
+  display: flex;
+  gap: 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  z-index: 10;
+
+  button {
+    background: transparent;
+    border: none;
+    color: #a8a8a8;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background-color: #36363f;
+      color: white;
+    }
+
+    &.active {
+      background-color: #403b58;
+      color: #a5a4ff;
+    }
+  }
+}
+
+.text-input {
+  position: absolute;
+  background: transparent;
+  border: 1px dashed #555;
+  font-family: 'Segoe UI', sans-serif;
+  padding: 0;
+  margin: 0;
+  outline: none;
+  overflow: hidden;
+  resize: none;
+  min-width: 50px;
+  min-height: 20px;
+  z-index: 100;
+}
+
+.properties-panel {
+  position: absolute;
+  top: 80px; 
+  left: 15px;
+  background-color: #232329;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 200px;
+  color: #ddd;
+  font-size: 14px;
+  z-index: 10;
+}
+
+.prop-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  
+  label {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #888;
+    letter-spacing: 1px;
+  }
+}
+
+.color-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+input[type="color"] {
+  border: none;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  background: none;
+}
+
+.color-circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid #444;
+  transition: transform 0.2s;
+
+  &:hover { transform: scale(1.1); }
+  
+  &.transparent {
+    background: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    mat-icon { font-size: 16px; width: 16px; height: 16px; color: #777; }
+  }
+  
+  &.selected {
+    border: 2px solid white;
+  }
+}
+
+input[type="range"] {
+  width: 100%;
+  cursor: pointer;
+}
